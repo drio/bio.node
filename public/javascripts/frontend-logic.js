@@ -1,15 +1,11 @@
 $(document).ready(function () {
   $("#loading_image").hide();
 
-  /*
-  $("#hidr").click(function () {
-    $("#loading_image").hide();
+  $('input').click(function() {
+    $(this).val("");
+    $("#amount").empty();
+    $("#results").empty();
   });
-
-  $("#showr").click(function () {
-    $("#loading_image").show();
-  });
-  */
 
   $(document).keypress(function(e) {
     switch(e.keyCode) { 
@@ -20,6 +16,7 @@ $(document).ready(function () {
         {},
         function(data) {
           $("#results").empty();
+          $("#amount").empty();
           if (data.length !== 0) {
             $.each(data, function(i,value){
               $("#results").append(value.path + "<br>");
@@ -27,6 +24,7 @@ $(document).ready(function () {
           } else {
             $("#results").append("No data. <br>");
           } 
+          $("#amount").append(data.length);
           $('#loading_image').hide();
         });
       break;
