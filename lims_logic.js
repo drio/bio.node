@@ -2,20 +2,14 @@ var sys = require("sys"),
    http = require('http');
    path = require('path');
    util = require('util');
-
-/* Augment Object to make object instances -- JS - the good parts */ 
-if (typeof Object.beget !== 'function') {
-  Object.beget = function (o) {
-    var F = function () {};
-    F.prototype = o;
-    return new F();
-  };
-};
+   os   = require('os');
 
 /* lims server and url details */
 var cfg = {
-  root_fs : "/Users/drio/sshfs/ardmore",
+  root_fs : os.type() === 'Darwin' ? "/Users/drio/sshfs/ardmore" : "",
 };
+
+exports.cfg = cfg;
 
 var Option = function(lib_name) {
   this.host = "lims-1.hgsc.bcm.tmc.edu",
@@ -47,7 +41,7 @@ var LimsEntry = function(l) {
  * /stornext/snfs5/next-gen/Illumina/Instruments/....
  * 700166/100625_SN166_0126_A201JGABXX/mini_analysis/Lane3;201JGABXX-3
  */
-this.query_lims = function(lib_name, callback) {
+exports.query_lims = function(lib_name, callback) {
   var o = new Option(lib_name);
   request = http.request(o, function(res) {
     var query_results = [];
@@ -56,9 +50,10 @@ this.query_lims = function(lib_name, callback) {
     res.on('data', function (chunk) { body += chunk });
 
     res.on('end', function () { 
-      if (res.headers["content-length"] != '4') { // Because the LIMS system does not gives us any clue
-                                             // when there is info for the lib or not
-        body.trim().split("\n").forEach (function (l){
+      // Because the LIMS system does not gives us any clue
+      // when there is info for the lib or not
+      if (res.headers["content-length"] != '4') {        
+          body.trim().split("\n").forEach (function (l){
           var le = new LimsEntry(l);
           query_results.push ({
             lane_number: le.lane_number,
@@ -75,3 +70,6 @@ this.query_lims = function(lib_name, callback) {
 
   request.end();
 }
+
+
+
