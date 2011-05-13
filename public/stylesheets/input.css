@@ -92,3 +92,7 @@ input.fail {
 	a:hover {
 		border-bottom: 1px dotted #fff;
 	}
+
+  .red {
+    color: #FF0000;
+  }

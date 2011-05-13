@@ -17,14 +17,20 @@ $(document).ready(function () {
         function(data) {
           $("#results").empty();
           $("#amount").empty();
+          var bp = 0; // bad bam paths (not found in filesystem)
           if (data.length !== 0) {
             $.each(data, function(i,value){
-              $("#results").append(value.path + "<br>");
+              if (value.found) {
+                $("#results").append(value.path + "<br>");
+              } else {
+                bp++;
+                $("#results").append("!" + value.path + "<br>");
+              }
             });
           } else {
             $("#results").append("No data. <br>");
           } 
-          $("#amount").append(data.length);
+          $("#amount").append("[" + data.length + "|" + bp + "]");
           $('#loading_image').hide();
         });
       break;
