@@ -24,12 +24,24 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-// Routes
+/*
+ * Index route
+ */
 app.get('/', function(req, res){
-  res.render('index', { title: 'lib.finder: index' });
+  res.render('index', { title: 'index', js_file: false});
 });
 
-// /bams/for/lib1 -> { "name": "lib1", "bams": [ "/lib1/bam1", "/lib1/bam2"] },
+/*
+ * Tool to display and verify the bams associated with a library
+ */
+app.get('/verify_lib', function(req, res) {
+  res.render('verify_lib', { title: 'verify_lib', js_file: 'verify_lib' });
+});
+
+/* 
+ * Returns a JSON result after pulling the bams associated 
+ *
+ */
 app.get('/bams/:name', function(req, res, next){
   var name = req.params.name;
 
@@ -39,7 +51,17 @@ app.get('/bams/:name', function(req, res, next){
   });
 });
 
+/* 
+ * For executing a recipe using a set of bams
+ */
+app.get('/new_project', function(req, res, next){
+  console.log("/new_prj request");
+  res.render('new_project', { title: 'new project', js_file: 'new_project' });
+});
+
 /**
+ * MAIN
+ *
  * Make sure, if working in mac, that the ardmore path
  * is mounted
  */
