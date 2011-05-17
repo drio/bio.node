@@ -14,7 +14,6 @@ body {
 	margin-top: 1%;
 }
 
-
 #content {
 	width: 100%;
 }
@@ -112,7 +111,7 @@ a:hover {
 
 .spacer {
   clear: both;
-	margin:0; padding:0%; 
+	margin:0; padding:2px; 
   border:0px solid #00AA21;
 }
 
@@ -126,7 +125,7 @@ a:hover {
 	font-weight: normal;
 	letter-spacing: 0px;
 	margin-top: 0%;
-  border: 0px dashed #AA2211;
+  border: 1px dashed #AA2211;
 }
 
 button {
@@ -152,4 +151,8 @@ button {
 .execute_button {
   font-size:80%;
   font-weight:normal;
+}
+
+.align_left {
+	text-align: left;
 }

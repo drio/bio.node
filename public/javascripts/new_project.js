@@ -6,7 +6,7 @@ var libs = {
 
 var log = {
   update : function(msg) {
-    $('#np_log').append(msg + "<br>");
+    $('#np_log').prepend(msg + "<br>");
   },
   clear : function() {
     $('#np_log').empty();
@@ -15,26 +15,41 @@ var log = {
 
 var gather_values = function() {
   var str = "";
+  log.clear();
   str += "Project name: [" + $("input[name='np_input_pname']").val() + "]<br>";
   str += "Sample  name: [" + $("input[name='np_input_sname']").val() + "]<br>";
+  $("input[name*='input_lib_']").each(function() {
+    str += "- " + $(this).attr("value");
+  });
+
   return str;
 }
 
 var add_new_input_library = function() {
   var input_t = '<input name="input_lib_XX" size="30">';
   var class_t = "<div id='div_lib_YY' class='spacer'>XX" +  
-                "<button name='del_lib_YY'>delete</button></div>";
+                "<div id='counter_YY' style='display:inline;'>?</div>" + 
+                "<button name='del_lib_YY'>delete</button>" + 
+                "<button name='bams_YY' value='YY'>bams</button>" + 
+                "</div>";
 
   var i     = libs.inc();
   var input = input_t.replace(/XX/g, i);
   var s     = class_t.replace(/XX/g, input).replace(/YY/g, i);
   $('#np_libs').append(s);
+
+  /* Setup callback for when user deletes the library */
   $("button[name='del_lib_" + i + "']").click(function () { 
     $('#div_lib_' + i).remove();
-    log.clear(); 
     $("input[name*='input_lib_']").each(function() { 
       log.update($(this).attr("value")); 
     });   
+  });
+
+  /* Setup callback for when user hits bams */
+  $("button[name='bams_" + i + "']").click(function () { 
+    lib_name = $("input[name='input_lib_" + i + "']").attr("value");
+    log.update("BAM: " + lib_name);
   });
 }
 
