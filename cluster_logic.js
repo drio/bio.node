@@ -1,6 +1,6 @@
 
-exports.run = function(cmd, callback){
-  run_in_cluster(cmd, callback);
+exports.run_cmd = function(cmd, callback){
+  run_cmd(cmd, callback);
 };
 
 var cfg = {
@@ -8,7 +8,7 @@ var cfg = {
   ip: "128.249.42.223",
 }
 
-function run_in_cluster(cmd, callback) {
+function run_cmd(cmd, callback) {
   var ssh_url= cfg.user + "@" + cfg.ip;
   var ssh = require("child_process").spawn("ssh", [ssh_url, cmd]);
   var r = { ok: true };

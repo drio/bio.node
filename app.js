@@ -52,12 +52,21 @@ app.get('/bams/:name', function(req, res, next){
 });
 
 /* 
- * For executing a recipe using a set of bams
+ * GUI to create a new project and ultimately run it in the cluster
  */
 app.get('/new_project', function(req, res, next){
   console.log("/new_prj request");
   res.render('new_project', { title: 'new project', js_file: 'new_project' });
 });
+
+/* 
+ * Execute a recipe in the cluster using the data (json req)
+ */
+app.post('/execute_project', function(req, res, next){
+  console.log("/execute_prj request");
+  res.send({"ok" : 1, "ping": req.ping});
+});
+
 
 /**
  * MAIN
