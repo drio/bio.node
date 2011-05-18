@@ -62,6 +62,10 @@ app.get('/new_project', function(req, res, next){
 
 /* 
  * Execute a recipe in the cluster using the data (json req)
+ * To simulate a POST JSON request:
+ * curl -v -H "Content-Type: application/json" \ 
+ * -X POST -d '{"cmd" : "sleep 10; ls -lach /tmp"}' \
+ * http://localhost:3000/execute_project && echo ""
  */
 app.post('/execute_project', function(req, res, next){
   //console.log(require("util").inspect(req));
