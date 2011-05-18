@@ -6,6 +6,7 @@ var app = module.exports = express.createServer();
 var path = require('path');
 require.paths.unshift(path.join(__dirname, '.'));
 var lims_logic = require("lims_logic");
+var cluster_logic = require("cluster_logic");
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -63,10 +64,27 @@ app.get('/new_project', function(req, res, next){
  * Execute a recipe in the cluster using the data (json req)
  */
 app.post('/execute_project', function(req, res, next){
-  console.log("/execute_prj request");
-  res.send({"ok" : 1, "ping": req.ping});
-});
+  //console.log(require("util").inspect(req));
 
+  cluster_logic.merge_dups_snp_calling(
+    { 
+      "ref_fasta"   : "/stornext/snfs0/rogers/drio_scratch/playground/1kg/human_g1k_v37.fasta",
+      "bams"        : [ 
+                        "/stornext/snfs0/rogers/drio_scratch/playground/test_pipe/bam1", 
+                        "/stornext/snfs0/rogers/drio_scratch/playground/test_pipe/bam2", 
+                      ],
+      "title"       : "node.test",
+      "prj_name"    : "ptest",
+      "sample_name" : "stest",
+    }, 
+    function(c_res) { 
+      res.send({"cmd": "TEST", "c_res": c_res.ok}); 
+      if (!c_res.ok) {
+        console.log("ERROR [execute_project] / stderr : " + c_res.stderr);
+      }
+    }
+  );
+});
 
 /**
  * MAIN

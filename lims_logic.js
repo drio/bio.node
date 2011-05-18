@@ -58,6 +58,7 @@ exports.query_lims = function(lib_name, callback) {
           query_results.push ({
             lane_number: le.lane_number,
             path       : le.bam_path,
+            // TODO: This should be asynchronous
             found      : path.existsSync(cfg.root_fs + le.bam_path)
           });
         });
