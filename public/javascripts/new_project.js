@@ -1,4 +1,3 @@
-
 var libs = {
   number: 0,
   inc: function() { this.number += 1; return this.number - 1; }
@@ -13,23 +12,48 @@ var log = {
   }
 }
 
-var gather_values = function() {
-  var str = "";
-  log.clear();
-  str += "Project name: [" + $("input[name='np_input_pname']").val() + "]<br>";
-  str += "Sample  name: [" + $("input[name='np_input_sname']").val() + "]<br>";
+var create_json_project = function() {
+  var prj_name    = $("input[name='np_input_pname']").val();
+  var sample_name = $("input[name='np_input_sname']").val();
+
+  log.update("Creating json for recipe.");
+  /* We have to get all the bams for all the libraries the user dumped */
+  var bams = []; 
   $("input[name*='input_lib_']").each(function() {
-    str += "- " + $(this).attr("value");
+    var lib_name = $(this).attr('value');
+    log.update("Ajax call to retrieve bams for lib: " +  lib_name);
+
+    /* I have to make a syncronous call, so we process each request one by one */
+    $.ajax({
+      type: 'GET',
+      url: 'bams/' + lib_name,
+      dataType: 'json',
+      success: function(data) { 
+        log.update("got it: " + data.length);
+        $.each(data, function(i,value){
+          if (value.found) { bams.push(value.path); }
+        });
+      },
+      data: {},
+      async: false
+    });
   });
 
-  return str;
+  var exec_info = {
+    "ref_fasta"   : "XXXXX",
+    "bams"        : bams,
+    "title"       : "bn." + prj_name + "." + sample_name,
+    "prj_name"    : prj_name,
+    "sample_name" : sample_name,
+  };
+  
+  return JSON.stringify(exec_info);
 }
 
-
-var add_new_input_library = function() {
+add_new_input_library = function() {
   var input_t = '<input name="input_lib_XX" size="30">';
   var class_t = "<div id='div_lib_YY' class='spacer'>XX" +  
-                  "<div id='counter_YY' style='display:inline;'>?</div>" + 
+                  "<div id='counter_YY' style='display:inline;'>[?|?]</div>" + 
                   "<button name='del_lib_YY'>delete</button>" + 
                   "<button name='bams_YY' value='YY'>bams</button>" + 
                 "</div>";
@@ -59,27 +83,32 @@ var add_new_input_library = function() {
       $.getJSON("bams/" + lib_name,
         {},
         function(data) {
-          log.update("callback answer for " + lib_name + " " + data.length);
-          $('#counter_' + i).empty().text(data.length);
+          var found = not_found = 0;
+          $.each(data, function(i,value){
+            if (value.found) { found +=1; } 
+            else { not_found +=1; } 
+          });
+          var c_text = "[" + found + "|" + not_found + "]";
+          log.update("callback answer for " + lib_name + " " + c_text);
+          $('#counter_' + i).empty().text(c_text);
         }
       );
   });
 }
 
+
 // new_project, javascript client side logic
 $(document).ready(function () {
-
   $('#np_log').empty();
   log.update("Ready ...");
 
   // Ready to run the recipe in the cluster  
   $("button[name='b_np_execute']").click(function () {
-    log.update(gather_values());
+    log.update(create_json_project());
   });
 
   // Add new library
   $("button[name='b_np_new_lib']").click(function () {
     add_new_input_library(); 
   });
-
 });
