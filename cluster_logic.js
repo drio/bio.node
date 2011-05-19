@@ -85,7 +85,7 @@ function run_cmd(d, callback) {
                               .replace(/WD/   , d.exec_dir)
                               .replace(/OUT/  , "out")
                               .replace(/ERR/  , "err")
-                              .replace(/TITLE/, "bn." + d.title);
+                              .replace(/TITLE/, d.title);
   console.log("cmd: " + cluster_cmd);
   var ssh = spawn("ssh", [ssh_url, cluster_cmd]);
   var r = { ok: true };
