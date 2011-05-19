@@ -66,11 +66,7 @@ app.get('/new_project', function(req, res, next){
  * curl -v -H "Content-Type: application/json" \ 
  * -X POST -d '{"cmd" : "sleep 10; ls -lach /tmp"}' \
  * http://localhost:3000/execute_project && echo ""
- */
-app.post('/execute_project', function(req, res, next){
-  //console.log(require("util").inspect(req));
-
-  cluster_logic.merge_dups_snp_calling(
+ * Example of the format of the json obj that has to be passed:
     { 
       "ref_fasta"   : "/stornext/snfs0/rogers/drio_scratch/playground/1kg/human_g1k_v37.fasta",
       "bams"        : [ 
@@ -81,6 +77,12 @@ app.post('/execute_project', function(req, res, next){
       "prj_name"    : "ptest",
       "sample_name" : "stest",
     }, 
+ */
+app.post('/execute_project', function(req, res, next){
+  //console.log(require("util").inspect(req));
+
+  cluster_logic.merge_dups_snp_calling(
+    req.body,
     function(c_res) { 
       res.send({"cmd": "TEST", "c_res": c_res.ok}); 
       if (!c_res.ok) {

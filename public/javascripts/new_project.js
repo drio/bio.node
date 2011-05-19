@@ -96,7 +96,6 @@ add_new_input_library = function() {
   });
 }
 
-
 // new_project, javascript client side logic
 $(document).ready(function () {
   $('#np_log').empty();

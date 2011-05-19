@@ -64,6 +64,7 @@ function single_cmd(d, callback) {
       callback({ ok : false});
     } else {
       d.exec_dir = cfg.ardmore.work_dir + "/" + d.prj_name + "/" + d.sample_name;
+      d.cmd = "recipe_snp_calling.sh -f " + d.ref_fasta + " " + d.bams.join(' ');
       run_cmd(d, function (r) { callback(r) });
     }
   });
