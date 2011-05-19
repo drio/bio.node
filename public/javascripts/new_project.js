@@ -15,6 +15,7 @@ var log = {
 var create_json_project = function() {
   var prj_name    = $("input[name='np_input_pname']").val();
   var sample_name = $("input[name='np_input_sname']").val();
+  var ref_genome  = $("select[name='select_ref']").val();
 
   log.update("Creating json for recipe.");
   /* We have to get all the bams for all the libraries the user dumped */
@@ -40,7 +41,7 @@ var create_json_project = function() {
   });
 
   var exec_info = {
-    "ref_fasta"   : "XXXXX",
+    "ref_fasta"   : select_ref,
     "bams"        : bams,
     "title"       : "bn." + prj_name + "." + sample_name,
     "prj_name"    : prj_name,
@@ -103,7 +104,12 @@ $(document).ready(function () {
 
   // Ready to run the recipe in the cluster  
   $("button[name='b_np_execute']").click(function () {
-    log.update(create_json_project());
+    if ($('select[name="select_ref"]').attr('value') === "none" ) {
+      log.update("UPS! Please, select a reference genome.");
+    }
+    else {
+      log.update(create_json_project());
+    }
   });
 
   // Add new library

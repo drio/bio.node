@@ -17,7 +17,7 @@ var cfg = {
   user: "deiros",
   ip: "128.249.42.223",
   ardmore: {
-    work_dir : "/stornext/snfs0/rogers/drio_scratch/playground/bio.node",       
+    work_dir : "/stornext/snfs0/rogers/drio_scratch/bio.node",
   },
   cluster : {
     template  : 'echo "CMD" | qsub -N "TITLE" -q QUEUE -d "WD" -l RES -V -o OUT -e ERR',
