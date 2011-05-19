@@ -35,11 +35,7 @@ var cfg = {
  * cluster cmd: recipe_snp_calling.sh -f fasta.fa bam1 bam2 .. bamN
  */
 function merge_dups_snp_calling(d, callback) {
-  var template = "recipe_snp_calling.sh -f REF BAMS";
-  var list_bams = "";
-
-  for(var i = 0; i < d.bams.length; i++) { list_bams += d.bams[i] + " " }
-  d.cmd = template.replace(/REF/, d.ref_fasta).replace(/BAMS/, list_bams);
+  d.cmd = "recipe_snp_calling.sh -f " + d.ref_fasta + " " + d.bams.join(' ');
   single_cmd(d, callback);
 }
 
@@ -64,7 +60,6 @@ function single_cmd(d, callback) {
       callback({ ok : false});
     } else {
       d.exec_dir = cfg.ardmore.work_dir + "/" + d.prj_name + "/" + d.sample_name;
-      d.cmd = "recipe_snp_calling.sh -f " + d.ref_fasta + " " + d.bams.join(' ');
       run_cmd(d, function (r) { callback(r) });
     }
   });

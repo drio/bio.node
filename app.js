@@ -79,14 +79,16 @@ app.get('/new_project', function(req, res, next){
     }, 
  */
 app.post('/execute_project', function(req, res, next){
-  //console.log(require("util").inspect(req));
-
+  //console.log(require("util").inspect(req.body));
+  console.log("Request to /execute_project");
   cluster_logic.merge_dups_snp_calling(
     req.body,
     function(c_res) { 
-      res.send({"cmd": "TEST", "c_res": c_res.ok}); 
+      res.send(c_res); 
       if (!c_res.ok) {
         console.log("ERROR [execute_project] / stderr : " + c_res.stderr);
+      } else {
+        console.log("OK /execute_project");
       }
     }
   );

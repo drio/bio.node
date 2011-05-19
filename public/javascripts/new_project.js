@@ -5,7 +5,7 @@ var libs = {
 
 var log = {
   update : function(msg) {
-    $('#np_log').prepend(">> " + msg + "<br>");
+    $('#np_log').prepend(new Date() + ">> " + msg + "<br>");
   },
   clear : function() {
     $('#np_log').empty();
@@ -41,14 +41,14 @@ var create_json_project = function() {
   });
 
   var exec_info = {
-    "ref_fasta"   : select_ref,
+    "ref_fasta"   : ref_genome,
     "bams"        : bams,
     "title"       : "bn." + prj_name + "." + sample_name,
     "prj_name"    : prj_name,
     "sample_name" : sample_name,
   };
   
-  return JSON.stringify(exec_info);
+  return exec_info;
 }
 
 add_new_input_library = function() {
@@ -108,7 +108,17 @@ $(document).ready(function () {
       log.update("UPS! Please, select a reference genome.");
     }
     else {
-      log.update(create_json_project());
+      log.update("Time to execute the recipe");
+      var json_recipe = create_json_project();
+      log.update(JSON.stringify(json_recipe));
+      $.ajax({
+        type: 'POST',
+        url: '/execute_project',
+        dataType: 'json',
+        success: function(data) { log.update("Job started" + data.stdout); },
+        data: json_recipe,
+        async: false
+      });
     }
   });
 
