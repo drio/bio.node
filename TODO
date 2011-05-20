@@ -1,0 +1,2 @@
+* add route to send json input directly
+* new_prj: select a recipe (currently we are sending to the single recipe we have
