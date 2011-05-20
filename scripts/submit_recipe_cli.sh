@@ -9,7 +9,6 @@ bam2="$b_path/bam2"
 
 if [ ! -t 0 ] # tty is a terminal
 then
-  echo "Asdfasdf"
   cat - | curl -v \
   -H "Content-Type: application/json" \
   -X POST \
