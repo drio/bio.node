@@ -7,8 +7,8 @@ b_path="/stornext/snfs0/rogers/drio_scratch/playground/test_pipe"
 bam1="$b_path/bam1"
 bam2="$b_path/bam2"
 
-if [ -t 0 ] # true(1) if opened and refers to a terminal
-then
+if [ -t 0 ] # true(0) if opened and refers to a terminal
+then # 0
   cat <<EOF
 {
   "ref_fasta"   : "$ref",
@@ -18,7 +18,7 @@ then
   "sample_name" : "sample_test"
 }
 EOF
-else
+else # 1
   cat - | curl -v \
   -H "Content-Type: application/json" \
   -X POST \

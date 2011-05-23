@@ -115,7 +115,7 @@ $(document).ready(function () {
         type: 'POST',
         url: '/execute_project',
         dataType: 'json',
-        success: function(data) { log.update("Job started" + data.stdout); },
+        success: function(data) { log.update("Job started: " + data.stdout); },
         data: json_recipe,
         async: false
       });
