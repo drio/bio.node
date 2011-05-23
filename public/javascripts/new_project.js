@@ -47,7 +47,7 @@ var create_json_project = function() {
     "title"       : "bn." + prj_name + "." + sample_name,
     "prj_name"    : prj_name,
     "sample_name" : sample_name,
-    "recipe"      : recipe_name,
+    "recipe"      : recipe,
   };
   
   return exec_info;
