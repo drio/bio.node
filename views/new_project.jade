@@ -1,11 +1,19 @@
 #np_execute
-  select(name="select_ref")
-    option(value="none") ref genome
-    option(value="/stornext/snfs0/rogers/drio_scratch/genomes/baboon_Pham_2.0.fixed_to_80chr.fa") Baboon
-    option(value="/stornext/snfs0/rogers/drio_scratch/genomes/gibbon_Nleu1.0.fixed.fa") Gibbon
-    option(value="/stornext/snfs0/rogers/drio_scratch/genomes/indian_macaque_phix.fixed.fa") Macaque
-    option(value="/stornext/snfs0/rogers/drio_scratch/genomes/marmoset.bwa.pipe.fixed.fa) Marmoset
-  | <button name="b_np_execute" class="execute_button">run</button>
+  div.select 
+    select(name="select_recipe")
+      option(value="none") recipe
+      option(value="merge_dups_snp_calling") SNP calling
+      option(value="recipe2") recipe2
+      option(value="recipe3") recipe3
+  div.select 
+    select(name="select_ref")
+      option(value="none") ref genome
+      option(value="/stornext/snfs0/rogers/drio_scratch/genomes/baboon_Pham_2.0.fixed_to_80chr.fa") Baboon
+      option(value="/stornext/snfs0/rogers/drio_scratch/genomes/gibbon_Nleu1.0.fixed.fa") Gibbon
+      option(value="/stornext/snfs0/rogers/drio_scratch/genomes/indian_macaque_phix.fixed.fa") Macaque
+      option(value="/stornext/snfs0/rogers/drio_scratch/genomes/marmoset.bwa.pipe.fixed.fa) Marmoset
+  div.select
+    | <button name="b_np_execute" class="execute_button">run</button>
 div.spacer
 h3 Project name 
   input(name='np_input_pname', size=30)

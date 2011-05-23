@@ -1,5 +1,4 @@
-* add route to send json input directly
-* new_prj: select a recipe (currently we are sending to the single recipe we have
-  -> Make a generic entry point that uses the JSON data to select what recipe to 
-     execute
+DONE add route to send json input directly
+DONE new_prj: select a recipe (currently we are sending to the single recipe we have
 * change names for new_project ? 
+* separate routes

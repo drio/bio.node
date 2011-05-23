@@ -16,6 +16,7 @@ var create_json_project = function() {
   var prj_name    = $("input[name='np_input_pname']").val();
   var sample_name = $("input[name='np_input_sname']").val();
   var ref_genome  = $("select[name='select_ref']").val();
+  var recipe      = $("select[name='select_recipe']").val();
 
   log.update("Creating json for recipe.");
   /* We have to get all the bams for all the libraries the user dumped */
@@ -46,6 +47,7 @@ var create_json_project = function() {
     "title"       : "bn." + prj_name + "." + sample_name,
     "prj_name"    : prj_name,
     "sample_name" : sample_name,
+    "recipe"      : recipe_name,
   };
   
   return exec_info;
@@ -104,16 +106,19 @@ $(document).ready(function () {
 
   // Ready to run the recipe in the cluster  
   $("button[name='b_np_execute']").click(function () {
-    if ($('select[name="select_ref"]').attr('value') === "none" ) {
-      log.update("UPS! Please, select a reference genome.");
+    if ($('select[name="select_ref"]').attr('value') === "none" || 
+        $('select[name="select_recipe"]').attr('value') === "none") {
+      log.update("Please, make sure you select a reference genome and a recipe.");
     }
     else {
       log.update("Time to execute the recipe");
       var json_recipe = create_json_project();
+      var r_name = $('select[name="select_recipe"]').attr('value');
+
       log.update(JSON.stringify(json_recipe));
       $.ajax({
         type: 'POST',
-        url: '/execute_project',
+        url: '/execute_project/' + r_name,
         dataType: 'json',
         success: function(data) { log.update("Job started: " + data.stdout); },
         data: json_recipe,

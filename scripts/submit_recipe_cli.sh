@@ -23,6 +23,6 @@ else # 1
   -H "Content-Type: application/json" \
   -X POST \
   -d "@-" \
-  http://localhost:3000/execute_project
+  http://localhost:3000/execute_project/merge_dups_snp_calling
   echo ""
 fi

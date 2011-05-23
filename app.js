@@ -78,10 +78,11 @@ app.get('/new_project', function(req, res, next){
       "sample_name" : "stest",
     }, 
  */
-app.post('/execute_project', function(req, res, next){
+app.post('/execute_project/:recipe_name', function(req, res, next){
   //console.log(require("util").inspect(req.body));
-  console.log("Request to /execute_project");
-  cluster_logic.merge_dups_snp_calling(
+  var r_name = req.params.recipe_name;
+  console.log("Request to /execute_project. Recipe name: " + r_name);
+  cluster_logic[r_name](
     req.body,
     function(c_res) { 
       res.send(c_res); 
