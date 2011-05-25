@@ -1,4 +1,5 @@
 DONE add route to send json input directly
 DONE new_prj: select a recipe (currently we are sending to the single recipe we have
+* move logic
 * change names for new_project ? 
 * separate routes

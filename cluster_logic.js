@@ -2,14 +2,6 @@ var fs     = require('fs');
 var path   = require('path');
 var spawn = require("child_process").spawn;
 
-exports.run_single_cmd = function(data, callback){ 
-  single_cmd(data, callback); 
-};
-exports.merge_dups_snp_calling = function(data, callback){ 
-  merge_dups_snp_calling(data, callback); 
-};
-
-
 /*
  * Various config parameters
  */
@@ -25,6 +17,18 @@ var cfg = {
     resources : "nodes=1:ppn=1,mem=4000mb",
   }
 }
+
+/*
+ * Make some functionality available for the rest of the app
+ */
+exports.run_single_cmd = function(data, callback){ 
+  single_cmd(data, callback); 
+};
+exports.merge_dups_snp_calling = function(data, callback){ 
+  merge_dups_snp_calling(data, callback); 
+};
+exports.sshfs_url = cfg.user + "@" + cfg.ip;
+
 
 /*
  * recipe to merge alignments (bams), mark dups and call snps

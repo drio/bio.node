@@ -84,7 +84,7 @@ app.post('/execute_project/:recipe_name', function(req, res, next){
   console.log("Request to /execute_project. Recipe name: " + r_name);
   cluster_logic[r_name](
     req.body,
-    function(c_res) { 
+    function(c_res) {
       res.send(c_res); 
       if (!c_res.ok) {
         console.log("ERROR [execute_project] / stderr : " + c_res.stderr);
@@ -98,22 +98,103 @@ app.post('/execute_project/:recipe_name', function(req, res, next){
 /**
  * MAIN
  *
+ */
+var version = '0.0.1';
+var usage = ''
+  + '\n'
+  + '  Usage: app [options]\n'
+  + '\n'
+  + '  Options:\n'
+  + '    -u, --umount             umount fuse fs\n'
+  + '    -m, --mount              mount  fuse fs\n'
+  + '    -v, --version            output framework version\n'
+  + '    -h, --help               output help information\n'
+  ;
+
+/*
+ * Display str and exit
+ */
+function abort(str) {
+  console.error(str);
+  process.exit(1);
+}
+
+/*
+ * Logic to sshfs mount and umount the remote filesystem
+ */
+var mounting = {
+  umount : function(mp) {
+    console.log("Trying to umount: " + mp);
+    exec("umount " + mp, function(err){
+      if (err) throw err;
+      console.log('umount <successfull> for dir: ' + mp);
+      process.exit(0);
+    })
+  },
+  ssh_mount : function(mp) {
+    var cmd = "sshfs "
+      + cluster_logic.sshfs_url 
+      + ":/ "
+      + ardmore_mount_point;
+    console.log("Trying to ssh_mount: " + cmd);
+    
+    exec(cmd, function(err){
+      if (err) throw err;
+      console.log('sshfs <successfull> for dir: ' + mp);
+      process.exit(0);
+    })
+  },
+}
+
+var exec = require('child_process').exec;
+var ardmore_mount_point = lims_logic.cfg.root_fs;
+var running_mode = 'normal';
+var args = process.argv.slice(2);
+
+while (args.length) {
+  var arg = args.shift();
+  switch (arg) {
+    case '-h':
+    case '--help':
+      abort(usage);
+      break;
+    case '-v':
+    case '--version':
+      abort(version);
+      break;
+    case '-u':
+    case '--umount':
+      running_mode='umount';
+      mounting.umount(ardmore_mount_point);
+      break;
+    case '-m':
+    case '--mount':
+      running_mode='sshfs mount';
+      mounting.ssh_mount("sshfs", ardmore_mount_point);
+      break;
+    default:
+        path = arg;
+  }
+}
+
+/*
  * Make sure, if working in mac, that the ardmore path
  * is mounted
  */
-var ardmore_mount_point = lims_logic.cfg.root_fs;
-if (os.type() === 'Darwin' && fs.readdirSync(ardmore_mount_point).length < 5) {
-  console.log("Are you sure " + ardmore_mount_point + " is mounted?");
-}
-else {
-  if (os.type() === 'Darwin') {
-    console.log("Cool! ardmore mount point available: " + ardmore_mount_point);
-  } else {
-    console.log("Uhh! It seems nodejs is running in ardmore.")
+if (running_mode === 'normal') { // We want to fire up the nodejs server
+  if (os.type() === 'Darwin' && fs.readdirSync(ardmore_mount_point).length < 5) {
+    console.log("Are you sure " + ardmore_mount_point + " is mounted?");
   }
-  // Only listen on $ node app.js
-  if (!module.parent) {
-    app.listen(3000);
-    console.log("Express server listening on port %d", app.address().port);
+  else {
+    if (os.type() === 'Darwin') {
+      console.log("Cool! ardmore mount point available: " + ardmore_mount_point);
+    } else {
+      console.log("Uhh! It seems nodejs is running in ardmore.")
+    }
+    // Only listen on $ node app.js
+    if (!module.parent) {
+      app.listen(3000);
+      console.log("Express server listening on port %d", app.address().port);
+    }
   }
 }
