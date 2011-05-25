@@ -4,7 +4,7 @@ var app = module.exports = express.createServer();
 
 /* Load lims logic module */
 var path = require('path');
-require.paths.unshift(path.join(__dirname, './backend'));
+require.paths.unshift(path.join(__dirname, '.'));
 var lims_logic = require("lims_logic");
 var cluster_logic = require("cluster_logic");
 
