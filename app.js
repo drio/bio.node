@@ -105,10 +105,11 @@ var usage = ''
   + '  Usage: app [options]\n'
   + '\n'
   + '  Options:\n'
-  + '    -u, --umount             umount fuse fs\n'
-  + '    -m, --mount              mount  fuse fs\n'
-  + '    -v, --version            output framework version\n'
-  + '    -h, --help               output help information\n'
+  + '    -u, --umount        umount fuse fs\n'
+  + '    -m, --mount         mount  fuse fs\n'
+  + '    -s, --start_server  start node server\n'
+  + '    -v, --version       output framework version\n'
+  + '    -h, --help          output help information\n'
   ;
 
 /*
@@ -146,42 +147,11 @@ var mounting = {
   },
 }
 
-var exec = require('child_process').exec;
-var ardmore_mount_point = lims_logic.cfg.root_fs;
-var running_mode = 'normal';
-var args = process.argv.slice(2);
-
-while (args.length) {
-  var arg = args.shift();
-  switch (arg) {
-    case '-h':
-    case '--help':
-      abort(usage);
-      break;
-    case '-v':
-    case '--version':
-      abort(version);
-      break;
-    case '-u':
-    case '--umount':
-      running_mode='umount';
-      mounting.umount(ardmore_mount_point);
-      break;
-    case '-m':
-    case '--mount':
-      running_mode='sshfs mount';
-      mounting.ssh_mount("sshfs", ardmore_mount_point);
-      break;
-    default:
-        path = arg;
-  }
-}
-
-/*
- * Make sure, if working in mac, that the ardmore path
- * is mounted
- */
-if (running_mode === 'normal') { // We want to fire up the nodejs server
+function run_as_server() {
+  /*
+   * Make sure, if working in mac, that the ardmore path
+   * is mounted
+   */
   if (os.type() === 'Darwin' && fs.readdirSync(ardmore_mount_point).length < 5) {
     console.log("Are you sure " + ardmore_mount_point + " is mounted?");
   }
@@ -198,3 +168,45 @@ if (running_mode === 'normal') { // We want to fire up the nodejs server
     }
   }
 }
+
+var exec = require('child_process').exec;
+var ardmore_mount_point = lims_logic.cfg.root_fs;
+var running_mode = 'normal';
+var args = process.argv.slice(2);
+
+if (args.length === 0) {
+  abort(usage);
+}
+else {
+  while (args.length) {
+    var arg = args.shift();
+    switch (arg) {
+      case '-h':
+      case '--help':
+        abort(usage);
+        break;
+      case '-v':
+      case '--version':
+        abort(version);
+        break;
+      case '-u':
+      case '--umount':
+        running_mode='umount';
+        mounting.umount(ardmore_mount_point);
+        break;
+      case '-m':
+      case '--mount':
+        running_mode='sshfs mount';
+        mounting.ssh_mount("sshfs", ardmore_mount_point);
+        break;
+      case '-s':
+      case '--start_server':
+        run_as_server();    
+        break;
+      default:
+        abort(usage);
+    }
+  }
+}
+
+
