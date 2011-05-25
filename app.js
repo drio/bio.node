@@ -141,7 +141,7 @@ var mounting = {
     
     exec(cmd, function(err){
       if (err) throw err;
-      console.log('sshfs <successfull> for dir: ' + mp);
+      console.log('sshfs <successfull>');
       process.exit(0);
     })
   },
