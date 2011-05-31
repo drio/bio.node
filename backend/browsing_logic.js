@@ -24,7 +24,7 @@ var walk = function (dir, filter, done) {
     if (err || !list) return done(results);
     list.forEach(function(f) {
       fs.stat(dir + '/' + f, function(err, stat) {
-        if (stat && stat.isDirectory() && f !== ".git") {
+        if (stat && stat.isDirectory() && f !== ".git") { // TODO: why is .git breakign this?
           walk(dir + '/' + f, filter,
             function(r) {
               results = results.concat(r);

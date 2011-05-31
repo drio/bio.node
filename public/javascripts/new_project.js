@@ -101,16 +101,34 @@ add_new_input_library = function() {
 
 // new_project, javascript client side logic
 $(document).ready(function () {
+  // Has the user selected the reference and the recipe?
+  var ok_ref_recipe = function() {
+    return ($('select[name="select_ref"]').attr('value') !== "none" &&
+           $('select[name="select_recipe"]').attr('value') !== "none");
+  }
+
+  // List of text warnings / errors
+  var log_text = { 
+    no_ref_or_recipe : "Please, make sure you select a reference genome and a recipe.",
+  }
+
   $('#np_log').empty();
   log.update("Ready ...");
 
+  // The user wants to see the json object of the recipe
+  $("button[name='b_to_json']").click(function () {
+    if (ok_ref_recipe()) {
+      log.update("-- START Dumping JSON");
+      log.update("<br>" + JSON.stringify(create_json_project()));
+      log.update("-- END Dumping JSON");
+    } else {
+      log.update(log_text.no_ref_or_recipe);
+    };
+  });
+  
   // Ready to run the recipe in the cluster  
   $("button[name='b_np_execute']").click(function () {
-    if ($('select[name="select_ref"]').attr('value') === "none" || 
-        $('select[name="select_recipe"]').attr('value') === "none") {
-      log.update("Please, make sure you select a reference genome and a recipe.");
-    }
-    else {
+    if (ok_ref_recipe) {
       log.update("Time to execute the recipe");
       var json_recipe = create_json_project();
       var r_name = $('select[name="select_recipe"]').attr('value');
@@ -124,6 +142,9 @@ $(document).ready(function () {
         data: json_recipe,
         async: false
       });
+    }
+    else {
+      log.update(log_text.no_ref_or_recipe);
     }
   });
 
