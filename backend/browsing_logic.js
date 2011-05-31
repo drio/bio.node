@@ -56,7 +56,7 @@ var walk = function (dir, filter, done) {
  *      file2.json
  *    
  */
-var find_json_data = function(dir, callback) {
+var find_json_files = function(dir, callback) {
   var json_results = {};
   walk(dir,
     function(f) {
@@ -66,15 +66,80 @@ var find_json_data = function(dir, callback) {
       results.forEach(function(e) {
         console.log("FIND: " + e);
       });
-      callback(json_results);
+      callback(results);
     }
   );
 }
 
+/*
+ * Iterate over all the json files, load their contents and 
+ * set the all_json object with the data.
+ * all_json is a representation of all the data available for 
+ * all the projects. I'd look like:
+ {
+    'PRJ1' : {
+      'SAMPLE_1' : {
+        'PLOT_1' {
+          "raw_reads"  : 9023,
+          "raw_single" : 1467
+        }
+      }
+    }
+  }
+*/
+var files_to_json = function(json_files, callback) {
+  var all_json = {};
+  var n_files = json_files.length;
+  json_files.forEach(function(js_file) {
+    var a      = js_file.split('/');  
+    var prj    = a[a.length - 3];
+    var sample = a[a.length - 2];
+    var plot   = a[a.length - 1].replace('.json', '');
+    console.log(">> " + prj + " " + sample + " " + plot );
+    fs.readFile(js_file, function (err, data) {
+      if (err) throw err;
+      all_json[prj] = all_json[prj] || {};
+      all_json[prj][sample] = all_json[prj][sample] || {};
+      all_json[prj][sample][plot] = all_json[prj][sample][plot] || {};
+      try {
+        all_json[prj][sample][plot] = JSON.parse(data);
+      } catch(e) { 
+        console.log("ERROR parsing JSON file: " + js_file); 
+        throw err;
+      }
+      n_files = n_files - 1;
+      if (n_files === 0) { callback(all_json); }
+    });
+  });
+}
+
 //var dir= "/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/bio.node";
 var dir= "/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/playground/test_pipe";
+//var dir = "/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/bio.node";
 //var dir= "/tmp/test_pipe";
-find_json_data(dir, function(json_results) {
-  console.log(json_results);
+
+find_json_files(dir, function(json_files) {
+  files_to_json(json_files, function(all_json) {
+    console.log("---------------");
+    console.log(JSON.stringify(all_json, null, 2));
+  });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

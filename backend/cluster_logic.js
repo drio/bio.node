@@ -1,6 +1,6 @@
 var fs     = require('fs');
 var path   = require('path');
-var spawn = require("child_process").spawn;
+var spawn  = require("child_process").spawn;
 
 /*
  * Various config parameters
