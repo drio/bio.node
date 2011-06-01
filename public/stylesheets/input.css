@@ -195,3 +195,47 @@ button {
 .align_left {
 	text-align: left;
 }
+
+#plot_select_area {
+ /*
+	margin:0; padding:0%; 
+  //color: #3399FF;
+  */
+  font: 40.5% "Trebuchet MS", sans-serif; 
+  margin: 5px;
+	width: 95%
+	text-align: left;
+	letter-spacing: 0px;
+	font-weight: bold;
+  font-family: Arial;
+  background-color:#FFFFFF;
+  border:0px solid #3399FF;
+  padding:2px 2px 2px 2px;
+}
+
+#plots_area {
+	width: 98%;
+	text-align: left;
+	letter-spacing: 0px;
+	font-weight: bold;
+  font-family: Arial;
+  background-color:#FFFFFF;
+  border:0px solid #3399FF;
+  padding:2px 2px 2px 2px;
+}
+
+/* plotting ui */
+#sel_project .ui-selecting { background: #FECA40; }
+#sel_project .ui-selected { background: #F39814; color: white; }
+#sel_project { list-style-type: none; margin: 0; padding: 0; width: 30%; display:inline-block; }
+#sel_project li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
+#sel_sample .ui-selecting { background: #FECA40; }
+#sel_sample .ui-selected { background: #F39814; color: white; }
+#sel_sample { list-style-type: none; margin: 0; padding: 0; width: 30%; display:inline-block;}
+#sel_sample li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
+#sel_plot .ui-selecting { background: #FECA40; }
+#sel_plot .ui-selected { background: #F39814; color: white; }
+#sel_plot { list-style-type: none; margin: 0; padding: 0; width: 30%; display:inline-block;}
+#sel_plot li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
