@@ -5,10 +5,13 @@ var app = module.exports = express.createServer();
 /* Load lims logic module */
 var path = require('path');
 require.paths.unshift(path.join(__dirname, './backend'));
-var lims_logic = require("lims_logic");
-var cluster_logic = require("cluster_logic");
+var lims_logic = require("lims_logic"),
+    cluster_logic = require("cluster_logic"),
+    browsing_logic = require("browsing_logic");
 
 app.configure(function(){
+  //app.use(express.logger('\x1b[33m:method\x1b[0m \x1b[32m:url\x1b[0m :response-time'));
+  app.use(express.logger());
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
@@ -45,8 +48,6 @@ app.get('/verify_lib', function(req, res) {
  */
 app.get('/bams/:name', function(req, res, next){
   var name = req.params.name;
-
-  console.log("/bams request: " + req.params.name);
   lims_logic.query_lims(name, function(lims_results) {
     res.send(lims_results);
   });
@@ -56,7 +57,6 @@ app.get('/bams/:name', function(req, res, next){
  * GUI to create a new project and ultimately run it in the cluster
  */
 app.get('/new_project', function(req, res, next){
-  console.log("/new_prj request");
   res.render('new_project', { title: 'new project', js_file: 'new_project' });
 });
 
@@ -81,7 +81,6 @@ app.get('/new_project', function(req, res, next){
 app.post('/execute_project/:recipe_name', function(req, res, next){
   //console.log(require("util").inspect(req.body));
   var r_name = req.params.recipe_name;
-  console.log("Request to /execute_project. Recipe name: " + r_name);
   cluster_logic[r_name](
     req.body,
     function(c_res) {
@@ -93,6 +92,19 @@ app.post('/execute_project/:recipe_name', function(req, res, next){
       }
     }
   );
+});
+
+/* 
+ * Returns a JSON object with all the json data found for all 
+ * the bionode projects (check backend logic for details)
+ */
+app.get('/all_json_data', function(req, res, next) {
+  var dir = "/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/playground/test_pipe";
+  browsing_logic.find_json_files(dir, function(json_files) {
+    browsing_logic.files_to_json(json_files, function(all_json) {
+      res.send(JSON.stringify(all_json, null, 2));
+    });
+  });
 });
 
 /**
