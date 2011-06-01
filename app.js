@@ -61,6 +61,13 @@ app.get('/new_project', function(req, res, next){
 });
 
 /* 
+ * GUI to the plots
+ */
+app.get('/browse_plots', function(req, res, next){
+  res.render('browse_plots', { title: 'browse_plots', js_file: 'plotting_ui' });
+});
+
+/* 
  * Execute a recipe in the cluster using the data (json req)
  * To simulate a POST JSON request:
  * curl -v -H "Content-Type: application/json" \ 
