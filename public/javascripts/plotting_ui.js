@@ -49,7 +49,17 @@ $(document).ready(function () {
   /* When clicking on plot, display it */
   $("#sel_plot").bind("selectableselected", function(event, ui) {
     var selected_plot = $('.ui-selected', this).text();
+    var json_data = all_json_data[what_select.prj][what_select.sample][selected_plot];
+    $("#plots_area").empty();
     $("#plots_area").append(">> " + selected_plot + "<br>"); 
+    $("#plots_area").append(JSON.stringify(json_data));
   });
 
+  var f = [{
+          data: [[0, 3], [4, 8], [8, 5], [9, 13]],
+          points: { show: true, fill: false },
+          lines: { show: true }
+        }];
+
+  $.plot($("#plots_area"), f);
 });

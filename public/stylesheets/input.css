@@ -214,6 +214,15 @@ button {
 }
 
 #plots_area {
+  width:800px;
+  height:600px;
+ 	border: 0px dashed #447733;
+  display: inline-block;
+  padding:2px 2px 2px 2px;
+  font: 50.5% "Trebuchet MS", sans-serif; 
+  margin: 25px;
+  letter-spacing: 0px;
+  /*
 	width: 98%;
 	text-align: left;
 	letter-spacing: 0px;
@@ -221,7 +230,7 @@ button {
   font-family: Arial;
   background-color:#FFFFFF;
   border:0px solid #3399FF;
-  padding:2px 2px 2px 2px;
+  */
 }
 
 /* plotting ui */
