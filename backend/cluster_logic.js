@@ -14,7 +14,7 @@ var cfg = {
   cluster : {
     template  : 'echo "CMD" | qsub -N "TITLE" -q QUEUE -d "WD" -l RES -V -o OUT -e ERR',
     queue     : "analysis", 
-    resources : "nodes=1:ppn=1,mem=4000mb",
+    resources : "nodes=1:ppn=8,mem=28000mb",
   }
 }
 
