@@ -10,8 +10,8 @@ var lims_logic = require("lims_logic"),
     browsing_logic = require("browsing_logic");
 
 app.configure(function(){
-  //app.use(express.logger('\x1b[33m:method\x1b[0m \x1b[32m:url\x1b[0m :response-time'));
-  app.use(express.logger());
+  app.use(express.logger('\x1b[33m:method\x1b[0m \x1b[32m:url\x1b[0m :response-time'));
+  //app.use(express.logger());
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
@@ -106,7 +106,8 @@ app.post('/execute_project/:recipe_name', function(req, res, next){
  * the bionode projects (check backend logic for details)
  */
 app.get('/all_json_data', function(req, res, next) {
-  var dir = "/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/playground/test_pipe";
+  //var dir = "/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/playground/test_pipe";
+  var dir ="/Users/drio/sshfs/ardmore/stornext/snfs0/rogers/drio_scratch/bio.node";
   browsing_logic.find_json_files(dir, function(json_files) {
     browsing_logic.files_to_json(json_files, function(all_json) {
       res.send(JSON.stringify(all_json, null, 2));
