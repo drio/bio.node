@@ -214,8 +214,8 @@ button {
 }
 
 #plots_area {
-  width: 800px;
-  height: 800px;
+  width: 700px;
+  height: 600px;
  	border: 0px dashed #447733;
   display: inline-block;
   padding:2px 2px 2px 2px;
@@ -248,3 +248,35 @@ button {
 #sel_plot .ui-selected { background: #F39814; color: white; }
 #sel_plot { list-style-type: none; margin: 0; padding: 0; width: 30%; display:inline-block;}
 #sel_plot li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
+/* tables */
+.table {
+	//line-height: 1.6em;
+}
+#hor-minimalist-a
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 15px;
+	background: #fff;
+	margin: 45px;
+	width: 480px;
+	border-collapse: collapse;
+	text-align: left;
+}
+#hor-minimalist-a th
+{
+	font-size: 15px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px 8px;
+	border-bottom: 2px solid #6678b1;
+}
+#hor-minimalist-a td
+{
+	color: #669;
+	padding: 9px 8px 0px 8px;
+}
+#hor-minimalist-a tbody tr:hover td
+{
+	color: #009;
+}

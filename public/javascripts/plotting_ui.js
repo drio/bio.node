@@ -2,23 +2,39 @@
 var plotting = {
   /* the different plots */
   distribution : function(l, d, e) {
+    var r_data = _.reject(d, function(a){ return a[1] < 100000 });
     var data = [ 
       {
         label  : l,
-        data   : d,
-        points : { show: true, fill: false },
-        lines  : { show: false }
+        data   : r_data,
       }
-    ]
-    $.plot(e, data, null); 
+    ];
+
+    var options = {
+      grid: { show: true },
+      points: { show: true, fill: false },
+      lines: { show: false }
+      //yaxis  : { min:0, max:5000000},
+      //xaxis  : { min:0, max:1000}
+      //hooks: { processDatapoints: [ drd_test ] }
+      //clickable: true,
+      //hoverable: true
+    };
+
+    $.plot(e, data, options); 
   },
 
   stats : function(l, d, e) { 
+    var html = '<table id="hor-minimalist-a" summary="bio.node table">';
+    html += '<thead> <tr> <th scope="col">key</th> <th scope="col">value</th> </tr> </thead>';
+    html += '<tbody>';
+
     e.empty();  
-    e.append(">> type: " + l);
     _.each(d, function(val, prop){ 
-      e.append(prop + ": " + val + "<br>");
+      html += "<tr><td>" + prop + "</td><td>" + val + "</td><tr>";
     });
+    html += "</tbody></table>";
+    e.append(html);
   },
 
   /* 
@@ -45,6 +61,8 @@ var plotting = {
  * Main
  */
 $(document).ready(function () {
+  $("#plots_area").append("Loading data ...");
+
   /* Load a ol-list with the properties of the object we pass */
   var load_in_list = function(json_data, element) {
     element.empty();
@@ -57,7 +75,7 @@ $(document).ready(function () {
   var all_json_data = {};
   var what_select = {
     prj   : null,
-    sample: null
+   sample: null
   };
   //$("#loading_image").hide();
  
@@ -75,6 +93,7 @@ $(document).ready(function () {
     function(data) {
       load_in_list(data, $("#sel_project"));
       all_json_data = data;
+      $("#plots_area").empty();
       //$("body").append("<pre>" + data.playground.test_pipe.map_stats.raw_reads + "</pre>");
   });
 
@@ -104,16 +123,16 @@ $(document).ready(function () {
     */
   });
 
+
   /*
+  var data = [[1, 1], [2, 2], [3, 3], [4, 1], [10, 20], [100, 1]];
+  var r_data = _.reject( data, function(a){ return a[0] > 5 || a[1] > 5 });
   var f = [
     {
       label: "scatter plot",
-      data: [[0, 3], [4, 8], [1, 3], [5, 2], [2, 2], [7, 2], [8, 5], [9, 13]],
-      points: { show: true, fill: false },
-      lines: { show: true }
-      //clickable: true,
-      //hoverable: true
-    },
+      data: r_data
+    }
+    ,
     {
       label: "bars plot",
       data: [[0, 3], [4, 8], [1, 3], [5, 2], [2, 2], [7, 2], [8, 5], [9, 13]],
@@ -122,9 +141,16 @@ $(document).ready(function () {
   ];
 
   var options = {
-    grid: { show: true }
+    grid: { show: true },
+    points: { show: true, fill: false },
+    lines: { show: false },
+    //yaxis  : { min:0, max:5},
+    //xaxis  : { min:0, max:5}
+    //hooks: { processDatapoints: [ drd_test ] }
+    //clickable: true,
+    //hoverable: true
   };
 
   $.plot($("#plots_area"), f, options);
-  */ 
+  */  
 });

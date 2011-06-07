@@ -91,8 +91,8 @@ var files_to_json = exports.files_to_json = function(json_files, callback) {
         try {
           all_json[prj][sample][plot] = JSON.parse(data);
         } catch(e) { 
-          console.log("ERROR parsing JSON file: " + js_file); 
-          throw err;
+          console.log("Skipping JSON file: " + js_file); 
+          //throw err;
         }
         n_files = n_files - 1;
         if (n_files === 0) { callback(all_json); }
