@@ -76,26 +76,35 @@ var find_json_files = exports.find_json_files = function(dir, callback) {
 var files_to_json = exports.files_to_json = function(json_files, callback) {
   var all_json = {};
   var n_files = json_files.length;
+
   if (n_files > 0) {
+
     json_files.forEach(function(js_file) {
       var a      = js_file.split('/');  
       var prj    = a[a.length - 3];
       var sample = a[a.length - 2];
       var plot   = a[a.length - 1].replace('.json', '');
+
       //console.log(">> " + prj + " " + sample + " " + plot );
       fs.readFile(js_file, function (err, data) {
-        if (err) throw err;
-        all_json[prj] = all_json[prj] || {};
-        all_json[prj][sample] = all_json[prj][sample] || {};
-        all_json[prj][sample][plot] = all_json[prj][sample][plot] || {};
-        try {
-          all_json[prj][sample][plot] = JSON.parse(data);
-        } catch(e) { 
-          console.log("Skipping JSON file: " + js_file); 
-          //throw err;
-        }
         n_files = n_files - 1;
-        if (n_files === 0) { callback(all_json); }
+        if (err) {
+          //throw err;
+          console.error("I cannot read file (We'll skip): " + js_file);
+          console.error("  + " + err);
+        } else {
+          all_json[prj] = all_json[prj] || {};
+          all_json[prj][sample] = all_json[prj][sample] || {};
+          all_json[prj][sample][plot] = all_json[prj][sample][plot] || {};
+          try {
+            all_json[prj][sample][plot] = JSON.parse(data);
+          } catch(e) {
+            console.error("Skipping JSON file (parsing issues): " + js_file);
+            //throw err;
+          }
+          //n_files = n_files - 1;
+          if (n_files === 0) { callback(all_json); }
+        }
       });
     });
   } else {
